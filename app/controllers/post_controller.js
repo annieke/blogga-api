@@ -1,17 +1,56 @@
 import Post from '../models/post_model';
 
 export const createPost = (req, res) => {
-  res.send('post should be created here');
+  const post = new Post();
+  post.title = req.body.title;
+  post.tags = req.body.tags;
+  post.content = req.body.content;
+  post.cover_url = req.body.cover_url;
+  post.save()
+  .then((result) => {
+    res.json({ message: 'Post created!' });
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
 };
+
 export const getPosts = (req, res) => {
-  res.send('posts should be returned');
+  Post.find({})
+  .then((posts) => {
+    res.json(posts);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
 };
+
 export const getPost = (req, res) => {
-  res.send('single post looked up');
+  Post.findOne({ _id: req.params.id })
+  .then((post) => {
+    res.json(post);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
 };
+
 export const deletePost = (req, res) => {
-  res.send('delete a post here');
+  Post.findOneAndRemove({ _id: req.params.id })
+  .then((result) => {
+    res.json({ message: 'Post deleted!' });
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
 };
+
 export const updatePost = (req, res) => {
-  res.send('update a post here');
+  Post.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+  .then((post) => {
+    res.json(post);
+  })
+  .catch((error) => {
+    res.status(500).json({ error });
+  });
 };
