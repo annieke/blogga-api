@@ -18,6 +18,7 @@ export const createPost = (req, res) => {
 
 export const getPosts = (req, res) => {
   Post.find({})
+  .populate('author', ['username'])
   .then((posts) => {
     res.json(posts);
   })
@@ -28,6 +29,7 @@ export const getPosts = (req, res) => {
 
 export const getPost = (req, res) => {
   Post.findOne({ _id: req.params.id })
+  .populate('author', ['username'])
   .then((post) => {
     res.json(post);
   })
