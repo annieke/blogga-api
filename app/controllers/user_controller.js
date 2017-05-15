@@ -15,12 +15,22 @@ export const signin = (req, res, next) => {
 };
 
 export const signup = (req, res, next) => {
+  const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
 
-  if (!email || !password) {
-    return res.status(422).send('You must provide email and password');
+  if (!username || !email || !password) {
+    return res.status(422).send('You must provide username, email, and password');
   }
+
+  User.findOne({ username }, (err, user) => {
+    if (err) {
+      return res.status(422).send('An error occurred checking this username');
+    }
+    if (user) {
+      return res.status(406).send('This username already exists');
+    }
+  });
 
   User.findOne({ email }, (err, user) => {
     if (err) {
@@ -32,6 +42,7 @@ export const signup = (req, res, next) => {
   });
 
   const user = new User();
+  user.username = username;
   user.email = email;
   user.password = password;
   user.save()

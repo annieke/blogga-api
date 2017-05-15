@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const UserSchema = new Schema({
+  username: { type: String, unique: true, lowercase: true },
   email: { type: String, unique: true, lowercase: true },
   password: String,
 }, {
@@ -10,11 +11,7 @@ const UserSchema = new Schema({
   },
 });
 
-const UserModel = mongoose.model('User', UserSchema);
-
 UserSchema.pre('save', function beforeUserSave(next) {
-  // this is a reference to our model
-  // the function runs in some other context so DO NOT bind it
   const user = this;
 
   if (!user.isModified('password')) return next();
@@ -41,5 +38,6 @@ UserSchema.methods.comparePassword = function comparePassword(candidatePassword,
   });
 };
 
+const UserModel = mongoose.model('User', UserSchema);
 
 export default UserModel;
