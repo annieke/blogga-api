@@ -1,5 +1,5 @@
 # blogga backend
 
 ## ToDo
-- [] Comments
-- [] User info (profile??)
+- [ ] Comments
+- [ ] User info (profile??)
